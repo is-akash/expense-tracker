@@ -6,6 +6,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import connectDB from "./database/db.js";
 import transactionRoute from "./routes/transactionRoute.js";
+import authRoutes from "./routes/authRoutes.js";
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -19,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 app.use("/v1/transactions", transactionRoute);
+app.use("/v1/auth", authRoutes);
 
 app.get("/", (req, res) => {
     res.send("This is home route");
