@@ -1,6 +1,6 @@
 export type ExpenseType = "income" | "expense";
 
-export interface Transaction {
+export interface TransactionType {
     transactionId: string;
     text: string;
     amount: number;
@@ -16,7 +16,7 @@ export enum ActionType {
 
 interface GetTransactionsAction {
     type: ActionType.GET_TRANSACTIONS;
-    payload: Transaction[];
+    payload: TransactionType[];
 }
 
 interface DeleteTransactionAction {
@@ -26,7 +26,7 @@ interface DeleteTransactionAction {
 
 interface AddTransactionAction {
     type: ActionType.ADD_TRANSACTION;
-    payload: Transaction;
+    payload: TransactionType;
 }
 
 export type Action =

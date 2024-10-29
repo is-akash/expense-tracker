@@ -2,12 +2,12 @@
 import { createContext, useReducer, ReactNode } from "react";
 import axios from "axios";
 import AppReducer from "./AppReducer";
-import { ActionType, Transaction } from "../types";
+import { ActionType, TransactionType } from "../types";
 import { toast } from "sonner";
 
 export interface State {
-    transactions: Transaction[];
-    addTransaction: (transaction: Transaction) => Promise<void>;
+    transactions: TransactionType[];
+    addTransaction: (transaction: TransactionType) => Promise<void>;
     getTransactions: () => Promise<void>;
     deleteTransaction: (id: string) => Promise<void>;
 }
@@ -49,7 +49,7 @@ const AppContext = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const addTransaction = async (transaction: Transaction) => {
+    const addTransaction = async (transaction: TransactionType) => {
         const config = {
             headers: {
                 "Content-Type": "application/json",

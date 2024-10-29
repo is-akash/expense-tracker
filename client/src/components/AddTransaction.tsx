@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useProjectContext } from "../context";
 import { v4 as uuidv4 } from "uuid";
-import { ExpenseType, Transaction } from "../types";
+import { ExpenseType, TransactionType } from "../types";
 
 export const AddTransaction = () => {
     interface FormData {
@@ -21,7 +21,7 @@ export const AddTransaction = () => {
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const newTransaction: Transaction = {
+        const newTransaction: TransactionType = {
             transactionId: uuidv4(),
             text: formData.text,
             amount: formData.amount,
