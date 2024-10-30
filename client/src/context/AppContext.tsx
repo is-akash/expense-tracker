@@ -2,21 +2,25 @@
 import { createContext, useReducer, ReactNode } from "react";
 import axios from "axios";
 import AppReducer from "./AppReducer";
-import { ActionType, TransactionType } from "../types";
+import { ActionType, TransactionType, UserType } from "../types";
 import { toast } from "sonner";
 
 export interface State {
+    user: UserType | null;
     transactions: TransactionType[];
     addTransaction: (transaction: TransactionType) => Promise<void>;
     getTransactions: () => Promise<void>;
     deleteTransaction: (id: string) => Promise<void>;
+    saveUserData: (userData: UserType) => void;
 }
 
 const initialState: State = {
+    user: null,
     transactions: [],
     addTransaction: async () => {},
     getTransactions: async () => {},
     deleteTransaction: async () => {},
+    saveUserData: () => {},
 };
 
 const Context = createContext<State>(initialState);
@@ -71,13 +75,22 @@ const AppContext = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    const saveUserData = async (userData: UserType) => {
+        dispatch({
+            type: ActionType.SAVE_USER_DATA,
+            payload: userData,
+        });
+    };
+
     return (
         <Context.Provider
             value={{
+                user: state.user,
                 transactions: state.transactions,
                 addTransaction,
                 getTransactions,
                 deleteTransaction,
+                saveUserData,
             }}
         >
             {children}

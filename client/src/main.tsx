@@ -1,15 +1,25 @@
+import "./index.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./App.tsx";
-import { Toaster } from "sonner";
-import { AppContext } from "./context/AppContext.tsx";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Root from "./Routes/Root";
+import RegisterPage from "./components/Auth/Register";
+import ErrorPage from "./components/ErrorPage";
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Root />,
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "auth/register",
+        element: <RegisterPage />,
+    },
+]);
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <AppContext>
-            <Toaster expand={true} closeButton />
-            <App />
-        </AppContext>
+        <RouterProvider router={router} />
     </StrictMode>
 );

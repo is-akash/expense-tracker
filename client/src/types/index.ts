@@ -5,13 +5,28 @@ export interface TransactionType {
     text: string;
     amount: number;
     expenseType: ExpenseType;
+    createdAt?: string;
+}
+
+export interface UserType {
+    userId: string;
+    username: string;
+    email: string;
+    access_token: string;
+    created_at: string;
 }
 
 // actionTypes.ts
 export enum ActionType {
+    SAVE_USER_DATA = "SAVE_USER_DATA",
     GET_TRANSACTIONS = "GET_TRANSACTIONS",
     DELETE_TRANSACTION = "DELETE_TRANSACTION",
     ADD_TRANSACTION = "ADD_TRANSACTION",
+}
+
+interface SaveUserAction {
+    type: ActionType.SAVE_USER_DATA;
+    payload: UserType;
 }
 
 interface GetTransactionsAction {
@@ -30,6 +45,7 @@ interface AddTransactionAction {
 }
 
 export type Action =
+    | SaveUserAction
     | GetTransactionsAction
     | DeleteTransactionAction
     | AddTransactionAction;
