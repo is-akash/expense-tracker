@@ -4,7 +4,7 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./Routes/Root";
 import ErrorPage from "./components/ErrorPage";
-import RegisterPage from "./Routes/Auth/Register";
+import AuthPage from "./Routes/Auth/AuthPage";
 
 const router = createBrowserRouter([
     {
@@ -14,7 +14,7 @@ const router = createBrowserRouter([
     },
     {
         path: "auth/register",
-        element: <RegisterPage />,
+        element: <AuthPage />,
     },
 ]);
 

@@ -1,8 +1,9 @@
 import { useState } from "react";
 // import { useProjectContext } from "../../context";
-import "./RegisterPage.css";
+import "./AuthPage.css";
 import { toast } from "sonner";
 import { Icons } from "../../components/Icons";
+import InputField from "../../components/InputField/InputField";
 
 interface formDataType {
     username: string;
@@ -19,7 +20,7 @@ const initialFormData: formDataType = {
 
 type activePage = "signin" | "signup";
 
-const RegisterPage = () => {
+const AuthPage = () => {
     const [activePage, setActivePage] = useState<activePage>("signin");
     const [step, setStep] = useState<number>(1);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -82,22 +83,48 @@ const RegisterPage = () => {
                         className='auth-form'
                     >
                         {step == 1 && (
-                            <div className='input-container'>
-                                <div className='icon'>
-                                    <Icons.mail />
-                                </div>
-                                <div className='input'>
-                                    <label htmlFor='user-email'>
-                                        Email Address
-                                    </label>
-                                    <input
-                                        id='user-email'
-                                        name='email'
-                                        type='text'
-                                    />
-                                </div>
-                                <div className='icon'>
-                                    <Icons.check />
+                            <div className='step'>
+                                <InputField
+                                    placeholder='example@gmail.com'
+                                    label='Email Address'
+                                    name='email'
+                                    type='email'
+                                    id='user-email'
+                                    icon={<Icons.mail />}
+                                />
+                                <button
+                                    type='button'
+                                    onClick={() => setStep((prev) => prev + 1)}
+                                >
+                                    Continue
+                                </button>
+                            </div>
+                        )}
+                        {step == 2 && (
+                            <div className='step'>
+                                <InputField
+                                    placeholder='password'
+                                    label='Password'
+                                    name='password'
+                                    type='password'
+                                    id='user-password'
+                                    icon={<Icons.eyeClosed />}
+                                />
+                                <div className='btns'>
+                                    <button
+                                        type='button'
+                                        onClick={() =>
+                                            setStep((prev) => prev - 1)
+                                        }
+                                    >
+                                        Go Back
+                                    </button>
+                                    <button
+                                        type='submit'
+                                        onClick={(e) => handleFormSubmit(e)}
+                                    >
+                                        Sign In
+                                    </button>
                                 </div>
                             </div>
                         )}
@@ -108,4 +135,4 @@ const RegisterPage = () => {
     );
 };
 
-export default RegisterPage;
+export default AuthPage;
