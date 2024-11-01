@@ -1,42 +1,85 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
-// import { useProjectContext } from "../../context";
 import "./AuthPage.css";
 import { toast } from "sonner";
 import { Icons } from "../../components/Icons";
 import InputField from "../../components/InputField/InputField";
+import axios from "axios";
+import { z } from "zod";
+import { useProjectContext } from "../../context";
 
 interface formDataType {
-    username: string;
     email: string;
     password: string;
-    confirm_password: string;
 }
 const initialFormData: formDataType = {
-    username: "",
     email: "",
     password: "",
-    confirm_password: "",
 };
+
+const formSchema = z.object({
+    email: z.string().email({ message: "Invalid email address" }),
+    password: z
+        .string()
+        .min(6, { message: "Password must be at least 6 characters long" }),
+});
 
 type activePage = "signin" | "signup";
 
 const AuthPage = () => {
-    const [activePage, setActivePage] = useState<activePage>("signin");
+    const [activePage, setActivePage] = useState<activePage>("signup");
     const [step, setStep] = useState<number>(1);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [formData, setFormData] = useState<formDataType>(initialFormData);
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    const [showCPassword, setShowCPassword] = useState<boolean>(false);
-    // const { saveUserData } = useProjectContext();
+    const { saveUserData } = useProjectContext();
 
     const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        if (formData.password !== formData.confirm_password) {
-            toast.error("Password doesn't match try again.");
+        const result = formSchema.safeParse(formData);
+
+        if (!result.success) {
+            const errors = result.error.format();
+            if (errors.email) {
+                toast.error(errors.email._errors[0]);
+            }
+            if (errors.password) {
+                toast.error(errors.password._errors[0]);
+            }
+            setIsLoading(false);
             return;
         }
-        // const { username, email, password } = formData;
+
+        try {
+            if (activePage == "signup") {
+                const response = await axios.post(
+                    "/api/v1/auth/register",
+                    formData
+                );
+                setFormData(initialFormData);
+                toast.success(response.data.message);
+                toast("Please sign in to continue");
+                setActivePage("signin");
+                setStep(1);
+                setIsLoading(false);
+            }
+
+            if (activePage == "signin") {
+                const response = await axios.post(
+                    "/api/v1/auth/login",
+                    formData
+                );
+                saveUserData(response.data.user);
+                setFormData(initialFormData);
+                toast.success(response.data.message);
+                setIsLoading(false);
+                console.log(response);
+            }
+        } catch (error: any) {
+            console.log(error.message);
+            toast.error(error.message);
+        }
     };
 
     const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +89,10 @@ const AuthPage = () => {
             ...prev,
             [name]: value,
         }));
+    };
+
+    const handleOnIconClick = () => {
+        setShowPassword((prev) => !prev);
     };
 
     return (
@@ -91,6 +138,8 @@ const AuthPage = () => {
                                     type='email'
                                     id='user-email'
                                     icon={<Icons.mail />}
+                                    handleOnChange={handleFormChange}
+                                    value={formData.email}
                                 />
                                 <button
                                     type='button'
@@ -106,9 +155,18 @@ const AuthPage = () => {
                                     placeholder='password'
                                     label='Password'
                                     name='password'
-                                    type='password'
+                                    type={showPassword ? "text" : "password"}
                                     id='user-password'
-                                    icon={<Icons.eyeClosed />}
+                                    icon={
+                                        showPassword ? (
+                                            <Icons.eyeOpen />
+                                        ) : (
+                                            <Icons.eyeClosed />
+                                        )
+                                    }
+                                    handleOnIconClick={handleOnIconClick}
+                                    handleOnChange={handleFormChange}
+                                    value={formData.password}
                                 />
                                 <div className='btns'>
                                     <button
@@ -116,19 +174,36 @@ const AuthPage = () => {
                                         onClick={() =>
                                             setStep((prev) => prev - 1)
                                         }
+                                        disabled={isLoading}
                                     >
                                         Go Back
                                     </button>
                                     <button
                                         type='submit'
                                         onClick={(e) => handleFormSubmit(e)}
+                                        disabled={isLoading}
                                     >
-                                        Sign In
+                                        {activePage == "signin"
+                                            ? "Sign In"
+                                            : "Sign up"}
                                     </button>
                                 </div>
                             </div>
                         )}
                     </form>
+                    <div className='divider-container'>
+                        <div className='divider' />
+                        <span>Or Continue With</span>
+                        <div className='divider' />
+                    </div>
+                    <div className='social-sign'>
+                        <div className='social-icon'>
+                            <Icons.google size='25px' />
+                        </div>
+                        <div className='social-icon'>
+                            <Icons.gitHub size='25px' />
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

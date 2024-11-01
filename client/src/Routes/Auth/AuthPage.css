@@ -98,6 +98,9 @@
     cursor: pointer;
     font-weight: 600;
     font-size: var(--text-sm);
+    color: #232323;
+    background-color: transparent;
+    user-select: none;
 }
 
 .register-main .container-right .btn-container button.active {
@@ -112,7 +115,6 @@
 .auth-form .step {
     display: flex;
     flex-direction: column;
-    gap: 20px;
 }
 
 .auth-form .step .btn-container {
@@ -129,6 +131,7 @@
     color: #ffffff;
     font-weight: 600;
     cursor: pointer;
+    margin-top: 30px;
 }
 
 .auth-form .step button:hover {
@@ -155,11 +158,57 @@
     transition: all 300ms ease;
 }
 
+.auth-form .step .btns button:disabled {
+    opacity: 50%;
+    cursor: not-allowed;
+}
+
 .auth-form .step button:first-child {
     background-color: #232323;
 }
 .auth-form .step button:first-child:hover {
     background-color: #383838;
+}
+
+.divider-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.divider-container .divider {
+    height: 1px;
+    flex: 1;
+    background-color: #ababab;
+    opacity: 60%;
+}
+
+.divider-container span {
+    color: #232323;
+    opacity: 70%;
+    padding: 0 10px;
+    font-size: var(--text-sm);
+}
+
+.social-sign {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.social-sign .social-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid #23232360;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 @media only screen and (max-width: 900px) {

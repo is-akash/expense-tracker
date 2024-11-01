@@ -9,7 +9,7 @@ export interface TransactionType {
 }
 
 export interface UserType {
-    userId: string;
+    id: string;
     username: string;
     email: string;
     access_token: string;
