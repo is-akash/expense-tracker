@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import UserModel from "../database/UserModel.js";
 import jwt from "jsonwebtoken";
+import { generateNumericUsername } from "../utils/utils.js";
 
 export const login = async (req: Request, res: Response): Promise<any> => {
     const { email, password } = req.body;
@@ -14,18 +15,21 @@ export const login = async (req: Request, res: Response): Promise<any> => {
                 .then((isPasswordCorrect) => {
                     if (isPasswordCorrect) {
                         const accessToken = jwt.sign(
-                            { id: user.userId, email: user.email },
+                            { id: user._id, email: user.email },
                             process.env.JWT_KEY,
                             { expiresIn: "7d" }
                         );
                         if (accessToken) {
-                            const { userId, username, email, createdAt } = user;
+                            const { _id, username, email, createdAt } = user;
                             res.status(200).json({
-                                userId,
-                                username,
-                                email,
-                                accessToken,
-                                createdAt,
+                                user: {
+                                    id: _id,
+                                    username,
+                                    email,
+                                    accessToken,
+                                    createdAt,
+                                },
+                                message: "Logged In successfully",
                             });
                         }
                     } else {
@@ -52,7 +56,8 @@ export const registerUser = async (
     req: Request,
     res: Response
 ): Promise<any> => {
-    const { username, email, password, userId } = req.body;
+    const { email, password } = req.body;
+    const username = generateNumericUsername();
 
     try {
         const user = await UserModel.findOne({ email: email });
@@ -66,7 +71,6 @@ export const registerUser = async (
         var hash = bcrypt.hashSync(password, 8);
 
         await UserModel.create({
-            userId,
             username,
             email,
             password: hash,

@@ -1,6 +1,6 @@
-import { UserType } from "../types/index.js";
-
-export function sanitizeUser(user: UserType) {
-    const { password, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+export function generateNumericUsername() {
+    const baseUsername = "User";
+    const timestamp = Date.now();
+    const randomNum = Math.floor(Math.random() * 9000) + 1000;
+    return `${baseUsername}${timestamp}${randomNum}`;
 }

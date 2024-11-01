@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createContext, useReducer, ReactNode } from "react";
+import {
+    createContext,
+    useReducer,
+    ReactNode,
+    useEffect,
+    useState,
+} from "react";
 import axios from "axios";
 import AppReducer from "./AppReducer";
 import { ActionType, TransactionType, UserType } from "../types";
@@ -8,25 +14,27 @@ import { toast } from "sonner";
 export interface State {
     user: UserType | null;
     transactions: TransactionType[];
+    loading: boolean;
     addTransaction: (transaction: TransactionType) => Promise<void>;
     getTransactions: () => Promise<void>;
     deleteTransaction: (id: string) => Promise<void>;
-    saveUserData: (userData: UserType) => void;
+    addUserData: (userData: UserType) => void;
 }
 
 const initialState: State = {
     user: null,
     transactions: [],
+    loading: true,
     addTransaction: async () => {},
     getTransactions: async () => {},
     deleteTransaction: async () => {},
-    saveUserData: () => {},
+    addUserData: () => {},
 };
 
 const Context = createContext<State>(initialState);
 
-// Provider component
 const AppContext = ({ children }: { children: ReactNode }) => {
+    const [loading, setLoading] = useState<boolean>(true);
     const [state, dispatch] = useReducer(AppReducer, initialState);
 
     const getTransactions = async () => {
@@ -75,22 +83,32 @@ const AppContext = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const saveUserData = async (userData: UserType) => {
+    const addUserData = async (userData: UserType) => {
         dispatch({
-            type: ActionType.SAVE_USER_DATA,
+            type: ActionType.ADD_USER_DATA,
             payload: userData,
         });
     };
+
+    useEffect(() => {
+        const userData = localStorage.getItem("userData");
+        if (userData) {
+            const parsedUserData = JSON.parse(userData);
+            addUserData(parsedUserData);
+            setLoading(false);
+        }
+    }, []);
 
     return (
         <Context.Provider
             value={{
                 user: state.user,
                 transactions: state.transactions,
+                loading,
                 addTransaction,
                 getTransactions,
                 deleteTransaction,
-                saveUserData,
+                addUserData,
             }}
         >
             {children}

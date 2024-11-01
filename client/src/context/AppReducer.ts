@@ -21,7 +21,7 @@ const AppReducer = (state: State, action: Action) => {
                 ...state,
                 transactions: [...state.transactions, action.payload],
             };
-        case ActionType.SAVE_USER_DATA:
+        case ActionType.ADD_USER_DATA:
             return {
                 ...state,
                 user: action.payload,

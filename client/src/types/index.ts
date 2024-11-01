@@ -18,14 +18,14 @@ export interface UserType {
 
 // actionTypes.ts
 export enum ActionType {
-    SAVE_USER_DATA = "SAVE_USER_DATA",
+    ADD_USER_DATA = "ADD_USER_DATA",
     GET_TRANSACTIONS = "GET_TRANSACTIONS",
     DELETE_TRANSACTION = "DELETE_TRANSACTION",
     ADD_TRANSACTION = "ADD_TRANSACTION",
 }
 
-interface SaveUserAction {
-    type: ActionType.SAVE_USER_DATA;
+interface AddUserAction {
+    type: ActionType.ADD_USER_DATA;
     payload: UserType;
 }
 
@@ -45,7 +45,7 @@ interface AddTransactionAction {
 }
 
 export type Action =
-    | SaveUserAction
+    | AddUserAction
     | GetTransactionsAction
     | DeleteTransactionAction
     | AddTransactionAction;

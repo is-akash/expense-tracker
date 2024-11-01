@@ -7,6 +7,7 @@ import InputField from "../../components/InputField/InputField";
 import axios from "axios";
 import { z } from "zod";
 import { useProjectContext } from "../../context";
+import { useNavigate } from "react-router-dom";
 
 interface formDataType {
     email: string;
@@ -27,12 +28,14 @@ const formSchema = z.object({
 type activePage = "signin" | "signup";
 
 const AuthPage = () => {
-    const [activePage, setActivePage] = useState<activePage>("signup");
+    const [activePage, setActivePage] = useState<activePage>("signin");
     const [step, setStep] = useState<number>(1);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [formData, setFormData] = useState<formDataType>(initialFormData);
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    const { saveUserData } = useProjectContext();
+    const { addUserData } = useProjectContext();
+
+    const navigate = useNavigate();
 
     const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -52,30 +55,27 @@ const AuthPage = () => {
         }
 
         try {
+            let response;
             if (activePage == "signup") {
-                const response = await axios.post(
-                    "/api/v1/auth/register",
-                    formData
-                );
-                setFormData(initialFormData);
-                toast.success(response.data.message);
+                response = await axios.post("/api/v1/auth/register", formData);
                 toast("Please sign in to continue");
                 setActivePage("signin");
-                setStep(1);
-                setIsLoading(false);
             }
 
             if (activePage == "signin") {
-                const response = await axios.post(
-                    "/api/v1/auth/login",
-                    formData
+                response = await axios.post("/api/v1/auth/login", formData);
+                addUserData(response.data.user);
+                localStorage.setItem(
+                    "userData",
+                    JSON.stringify(response.data.user)
                 );
-                saveUserData(response.data.user);
-                setFormData(initialFormData);
-                toast.success(response.data.message);
-                setIsLoading(false);
-                console.log(response);
+                navigate("/");
             }
+            console.log(response);
+            setFormData(initialFormData);
+            setIsLoading(false);
+            setStep(1);
+            toast.success(response?.data.message);
         } catch (error: any) {
             console.log(error.message);
             toast.error(error.message);
