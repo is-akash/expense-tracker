@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useProjectContext } from "../context";
+// import { useProjectContext } from "../context";
 import { v4 as uuidv4 } from "uuid";
 import { ExpenseType, TransactionType } from "../types";
 
@@ -17,7 +17,7 @@ export const AddTransaction = () => {
 
     const [formData, setFormData] = useState(initialFormData);
 
-    const { addTransaction } = useProjectContext();
+    // const { addTransaction } = useProjectContext();
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -28,7 +28,7 @@ export const AddTransaction = () => {
             expenseType: formData.expenseType,
         };
 
-        addTransaction(newTransaction);
+        // addTransaction(newTransaction);
     };
 
     const handleOnChange = (

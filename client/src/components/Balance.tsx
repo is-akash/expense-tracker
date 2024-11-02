@@ -1,19 +1,16 @@
-import { useProjectContext } from "../context";
 import { numberWithCommas } from "../lib/utils";
 
 export const Balance = () => {
-    const { transactions } = useProjectContext();
-
     let incomeTotal = 0;
     let expenseTotal = 0;
 
-    transactions.forEach((transaction) => {
-        if (transaction.expenseType === "income") {
-            incomeTotal += transaction.amount;
-        } else if (transaction.expenseType === "expense") {
-            expenseTotal += transaction.amount;
-        }
-    });
+    // transactions.forEach((transaction) => {
+    //     if (transaction.expenseType === "income") {
+    //         incomeTotal += transaction.amount;
+    //     } else if (transaction.expenseType === "expense") {
+    //         expenseTotal += transaction.amount;
+    //     }
+    // });
 
     return (
         <>

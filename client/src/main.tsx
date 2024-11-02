@@ -6,7 +6,7 @@ import Root from "./Routes/Root";
 import ErrorPage from "./components/ErrorPage";
 import AuthPage from "./Routes/Auth/AuthPage";
 import { Toaster } from "sonner";
-import { AppContext } from "./context/AppContext";
+import StoreProvider from "./lib/store/StoreProvider";
 
 const router = createBrowserRouter([
     {
@@ -22,9 +22,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <AppContext>
+        <StoreProvider>
             <Toaster expand={true} closeButton />
             <RouterProvider router={router} />
-        </AppContext>
+        </StoreProvider>
     </StrictMode>
 );

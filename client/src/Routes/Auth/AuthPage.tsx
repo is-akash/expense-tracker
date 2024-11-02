@@ -6,7 +6,6 @@ import { Icons } from "../../components/Icons";
 import InputField from "../../components/InputField/InputField";
 import axios from "axios";
 import { z } from "zod";
-import { useProjectContext } from "../../context";
 import { useNavigate } from "react-router-dom";
 
 interface formDataType {
@@ -33,7 +32,6 @@ const AuthPage = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [formData, setFormData] = useState<formDataType>(initialFormData);
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    const { addUserData } = useProjectContext();
 
     const navigate = useNavigate();
 
@@ -64,7 +62,7 @@ const AuthPage = () => {
 
             if (activePage == "signin") {
                 response = await axios.post("/api/v1/auth/login", formData);
-                addUserData(response.data.user);
+
                 localStorage.setItem(
                     "userData",
                     JSON.stringify(response.data.user)
