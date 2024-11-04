@@ -9,3 +9,5 @@ Keep your finances in check with this user-friendly expense tracker.
 ```
 ./start.sh
 ```
+
+## new day doing nothing at all
