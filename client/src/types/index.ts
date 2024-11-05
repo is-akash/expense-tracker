@@ -49,3 +49,29 @@ export type Action =
     | GetTransactionsAction
     | DeleteTransactionAction
     | AddTransactionAction;
+
+export interface AxiosErrorType {
+    message: string; // Error message
+    name: string; // Name of the error (AxiosError)
+    stack: string; // Stack trace, useful for debugging
+    config: {
+        transitional: {
+            silentJSONParsing: boolean;
+            forcedJSONParsing: boolean;
+            clarifyTimeoutError: boolean;
+        };
+        adapter: string[]; // Array of adapters like 'xhr', 'http', 'fetch'
+        timeout: number; // Timeout value (0 means no timeout)
+        xsrfCookieName: string;
+        xsrfHeaderName: string;
+        maxContentLength: number; // Max content length (use -1 for no limit)
+        maxBodyLength: number; // Max body length (use -1 for no limit)
+        env: Record<string, unknown>; // Custom environment properties
+        headers: Record<string, string>; // HTTP request headers
+        method: string; // HTTP method (e.g., 'post', 'get')
+        url: string; // URL of the request
+        data: string; // The request payload (e.g., body data sent)
+    };
+    code: string; // Error code (e.g., 'ERR_BAD_REQUEST')
+    status: number; // HTTP status code (e.g., 401)
+}

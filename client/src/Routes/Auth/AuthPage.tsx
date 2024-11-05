@@ -34,6 +34,7 @@ const AuthPage = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
     const navigate = useNavigate();
+    const api = import.meta.env.VITE_API_BASE_URL;
 
     const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -55,13 +56,16 @@ const AuthPage = () => {
         try {
             let response;
             if (activePage == "signup") {
-                response = await axios.post("/api/v1/auth/register", formData);
+                response = await axios.post(
+                    `${api}/v1/auth/register`,
+                    formData
+                );
                 toast("Please sign in to continue");
                 setActivePage("signin");
             }
 
             if (activePage == "signin") {
-                response = await axios.post("/api/v1/auth/login", formData);
+                response = await axios.post(`${api}/v1/auth/login`, formData);
 
                 localStorage.setItem(
                     "userData",
@@ -75,8 +79,8 @@ const AuthPage = () => {
             setStep(1);
             toast.success(response?.data.message);
         } catch (error: any) {
-            console.log(error.message);
-            toast.error(error.message);
+            console.log(error.response);
+            toast.error(error.response?.data?.message);
         }
     };
 

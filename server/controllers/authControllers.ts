@@ -6,6 +6,7 @@ import { generateNumericUsername } from "../utils/utils.js";
 
 export const login = async (req: Request, res: Response): Promise<any> => {
     const { email, password } = req.body;
+    console.log(req.body);
 
     try {
         const user = await UserModel.findOne({ email: email });
